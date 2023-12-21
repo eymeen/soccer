@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Path Generator</title>
+    <style>
+        svg{
+            transform: skew(-.512rad);
+        }
+    </style>
+</head>
+<body>
+
+<svg width="500" height="600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Example usage: angle is set to 45 degrees -->
+    <path d="" fill="none" stroke="black"/>
+</svg>
+
+<script>
+    // Function to generate an SVG path for a parabolic curve
+    function generateSVGPath(angle) {
+        // Assuming a fixed initial and final point for simplicity
+        const startX = 250;
+        const startY = 590;
+        const endX = 250;
+        const endY = 10;
+
+        // Converting the angle to radians
+        const theta = angle * (Math.PI / 180);
+
+        // Calculating control point for the quadratic Bezier curve
+        const controlX = startX + Math.tan(theta) * (startY - endY) / 2;
+        const controlY = startY - (startY - endY) / 2;
+
+        // Constructing the SVG path string
+        const pathString = `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`;
+
+        return pathString;
+    }
+
+    // Example usage: angle is set to 45 degrees
+    const angle = 45;
+    const svgPath = generateSVGPath(angle);
+
+    // Setting the SVG path attribute
+    const svgElement = document.querySelector('path');
+    svgElement.setAttribute('d', svgPath);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #football {
+      position: absolute;
+      width: 50px; /* Adjust the size of your football image */
+      height: 50px;
+      background: url('football.png') center/cover; /* Replace 'football.png' with the path to your football image */
+      border-radius: 50%;
+      transition: transform 0.1s; /* Smooth transition */
+    }
+  </style>
+</head>
+<body>
+  <div id="football"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var football = document.getElementById("football");
+
+      // Set launch angle in degrees
+      var launchAngle = 45; // Adjust as needed
+      var launchSpeed = 5; // Adjust as needed
+      var gravity = 0.1; // Adjust as needed
+
+      // Convert launch angle to radians
+      var launchAngleRad = launchAngle * (Math.PI / 180);
+
+      // Calculate initial velocities
+      var initialVelocityX = launchSpeed * Math.cos(launchAngleRad);
+      var initialVelocityY = launchSpeed * Math.sin(launchAngleRad);
+
+      // Animation function
+      function animate() {
+        var time = 0;
+        var x = 0;
+        var y = 0;
+
+        function move() {
+          // Calculate new position based on time and initial velocities
+          x = initialVelocityX * time;
+          y = initialVelocityY * time + 0.5 * gravity * Math.pow(time, 2);
+
+          football.style.transform = `translate(${x}px, ${y}px) rotate(${launchAngle}deg) scaleX(-1)`;
+          // The `scaleX(-1)` flips the image horizontally to simulate the shooter's perspective
+
+          // If you want the animation to stop at the peak point (critical point), uncomment the following lines
+          // if (y >= 0) {
+          //   return;
+          // }
+
+          time += 0.1; // Adjust the time step for smoother or faster motion
+
+          requestAnimationFrame(move);
+        }
+
+        move();
+      }
+
+      // Start the animation
+      animate();
+    });
+  </script>
+</body>
+</html>

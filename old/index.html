@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer</title>
+    <style>
+		*{
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+        body{
+            background: url('./bg.jpg') top center no-repeat;
+            background-size: cover;
+        }
+        #players{
+			width: 330px;
+			position: absolute;
+			bottom: 80px;
+			right: 47%;
+			transform: translate(50%, 0);
+		}
+        #soccer{
+            position: absolute;
+        }
+        #playground{
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        #football {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: url('football.png') center/cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="playground">
+        <img src="./football.png" alt="" id="football">
+        <img src="./players.png" alt="" id="players">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          var football = document.getElementById("football");
+
+          function calculateCurve(x) {
+            return 0.02 * Math.pow(x, 2);
+          }
+
+          function animate() {
+            var x = 0;
+            var y = calculateCurve(x);
+
+            function move() {
+              football.style.transform = `translate(${x}px, ${y}px)`;
+              x += 2;
+              y = calculateCurve(x);
+
+              if (x > window.innerWidth) {
+                x = 0;
+              }
+
+              requestAnimationFrame(move);
+            }
+
+            move();
+          }
+
+          //animate();
+        });
+      </script>
+</body>
+</html>
