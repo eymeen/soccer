@@ -3,17 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <title>Calculus in Football</title>
     <style>
         *{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Nanum Pen Script', cursive;
+
         }
         body{
             background: url(./bg.svg) center center no-repeat;
             background-size: cover;
             height: 100vh;
+        }
+        input{
+            all: unset;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* For Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
         #playground{
             height: 100vh;
@@ -21,10 +39,11 @@
             position: relative;
         }
         #players{
-            width: 684.97px;
+            width: 314.97px;
             height: 323.81px;
             position: absolute;
-            top: 377.98px;
+            /*top: 377.98px;*/
+            top: 347.98px;
             left: 719.86px;
             z-index: 1;
         }
@@ -36,11 +55,11 @@
             left: 354.2px;
         }
         #football{
-            width: 87.34px;
-            height: 87.19px;
+            width: 73.34px;
+            height: 73.34px;
             position: absolute;
-            top: 677.46px;
-            left: 651.11px;
+            top: 652.46px;
+            left: 649.11px;
         }
         #goalkeeper{
             width: 83.4px;
@@ -55,10 +74,37 @@
             left: 693px;
             width: 600px;
         }
+        .control{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            padding: 120px;
+        }
+        .control p{
+            font-size: 64px;
+        }
+        .control input{
+            width: 42px;
+            margin: 0 18px;
+            font-size: 46px;
+        }
+        #shoot{
+            cursor: pointer;
+            transition: all .1s ease-in-out;
+        }
+        #shoot:active{
+            transform: translate(0, 10px);
+        }
     </style>
 </head>
 <body>
     <div id="playground">
+        <div class="control">
+            <p>angle</p>
+            <input type="number" id="angle" placeholder="00">
+            <img id="shoot" src="./btn.png">
+        </div>
         <svg id="players" width="425" height="324" viewBox="0 0 425 324" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path opacity="0.2" d="M212.664 323.834C329.906 323.834 424.949 316.03 424.949 306.404C424.949 296.777 329.906 288.974 212.664 288.974C95.4223 288.974 0.378906 296.777 0.378906 306.404C0.378906 316.03 95.4223 323.834 212.664 323.834Z" fill="#488C6C"/>
             <path d="M151.505 111.801L147.898 81.4951L131.47 84.0794L128.197 120.963L151.505 111.801Z" fill="#FE9F73"/>
@@ -285,9 +331,28 @@
         </svg>
     </div>
 
-
+<script src="./animejs/anime.min.js"></script>
 
 <script>
+    const btn = document.querySelector("#shoot");
+    const input = document.querySelector("#angle");
+    const ball = document.querySelector("#football");
+    btn.addEventListener("click", ()=>{
+        let deg = input.value;
+        changeAngle(deg);
+
+        let path = anime.path(document.querySelector('#curve path'));
+        ball.style.top = "322.46px";
+        anime({
+            targets: '#football',
+            translateX: path('x'),
+            translateY: path('y'),
+            rotate: path('angle'),
+            easing: 'cubicBezier(0, 0.7, 0.9, 1)',
+            duration: 1700,
+            loop: false
+        });
+    })
     function generateSVGPath(angle) {
         const startX = 0;
         const startY = 370;
@@ -304,21 +369,12 @@
         return { pathString, controlX, controlY };
     }
 
-    const angle = 70;
-    const { pathString, controlX, controlY } = generateSVGPath(angle);
+    function changeAngle(angle){
+        const { pathString, controlX, controlY } = generateSVGPath(angle);
 
-
-    const svgElement = document.querySelector('#curve path');
-    svgElement.setAttribute('d', pathString);
-
-    const svgElementWidth = Math.max(2 * controlX, 500);
-    document.querySelector('svg').setAttribute('width', svgElementWidth);
-
-    const viewBoxWidth = svgElementWidth + 20;
-    const viewBoxHeight = 400;
-    const viewBox = `0 0 ${viewBoxWidth} ${viewBoxHeight}`;
-    document.querySelector('svg').setAttribute('viewBox', viewBox);
-
+        const svgElement = document.querySelector('#curve path');
+        svgElement.setAttribute('d', pathString);
+    }
 </script>
 </body>
 </html>
